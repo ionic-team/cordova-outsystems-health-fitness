@@ -35,7 +35,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-class OSHealthFitness : CordovaPlugin() {
+class OSHealthFitnessPlugin : CordovaPlugin() {
     var callbackContext: CallbackContext? = null
 
     val gson by lazy { Gson() }

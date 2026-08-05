@@ -13,53 +13,53 @@ exports.requestPermissions = function (success, error, params) {
 
     var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, workoutVariables];
 
-    exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
+    exec(success, error, 'OSHealthFitnessPlugin', 'requestPermissions', args);
 };
 
 exports.getData = function (success, error, params) {
-    exec(success, error, 'OSHealthFitness', 'getData', [params]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'getData', [params]);
 };
 
 exports.getWorkoutData = function (success, error, params) {
-    exec(success, error, 'OSHealthFitness', 'getWorkoutData', [params]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'getWorkoutData', [params]);
 };
 
 exports.updateData = function (success, error) {
-    exec(success, error, 'OSHealthFitness', 'updateData');
+    exec(success, error, 'OSHealthFitnessPlugin', 'updateData');
 };
 
 exports.enableBackgroundJob = function (success, error) {
-    exec(success, error, 'OSHealthFitness', 'enableBackgroundJob');
+    exec(success, error, 'OSHealthFitnessPlugin', 'enableBackgroundJob');
 };
 
 exports.writeData = function (success, error, variable, value) {
-    exec(success, error, 'OSHealthFitness', 'writeData', [variable, value]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'writeData', [variable, value]);
 };
 
 exports.getLastRecord = function (success, error, variable) {
-    exec(success, error, 'OSHealthFitness', 'getLastRecord', [variable]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'getLastRecord', [variable]);
 };
 
 exports.setBackgroundJob = function (success, error, params) {
-    exec(success, error, 'OSHealthFitness', 'setBackgroundJob', [params]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'setBackgroundJob', [params]);
 };
 
 exports.deleteBackgroundJob = function (success, error, params) {
-    exec(success, error, 'OSHealthFitness', 'deleteBackgroundJob', [params]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'deleteBackgroundJob', [params]);
 };
 
 exports.listBackgroundJobs = function (success, error) {
-    exec(success, error, 'OSHealthFitness', 'listBackgroundJobs');
+    exec(success, error, 'OSHealthFitnessPlugin', 'listBackgroundJobs');
 };
 
 exports.updateBackgroundJob = function (success, error, params) {
-    exec(success, error, 'OSHealthFitness', 'updateBackgroundJob', [params]);
+    exec(success, error, 'OSHealthFitnessPlugin', 'updateBackgroundJob', [params]);
 };
 
 exports.disconnectFromHealthConnect = function (success, error) {
-    exec(success, error, 'OSHealthFitness', 'disconnectFromHealthConnect');
+    exec(success, error, 'OSHealthFitnessPlugin', 'disconnectFromHealthConnect');
 };
 
 exports.openHealthConnect = function (success, error) {
-    exec(success, error, 'OSHealthFitness', 'openHealthConnect');
+    exec(success, error, 'OSHealthFitnessPlugin', 'openHealthConnect');
 };

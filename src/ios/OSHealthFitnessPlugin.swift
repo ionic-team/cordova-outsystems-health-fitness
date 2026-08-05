@@ -1,7 +1,7 @@
 import IONHealthFitnessLib
 
-@objc(OSHealthFitness)
-class OSHealthFitness: CDVPlugin {
+@objc(OSHealthFitnessPlugin)
+class OSHealthFitnessPlugin: CDVPlugin {
     var plugin: HealthFitnessPlugin?
 
     override func pluginInitialize() {
