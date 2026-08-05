@@ -1,5 +1,5 @@
 <div align="center">
-<h3 align="center">cordova-outsystems-healthfitness</h3>
+<h3 align="center">cordova-outsystems-health-fitness</h3>
 
   <p align="center">
     OutSystems' Cordova Plugin for Health & Fitness.
@@ -13,7 +13,7 @@
 ## Installation
 
 ```bash
-cordova plugin add https://github.com/ionic-team/cordova-outsystems-healthfitness.git
+cordova plugin add https://github.com/ionic-team/cordova-outsystems-health-fitness.git
 ```
 
 ## Description
