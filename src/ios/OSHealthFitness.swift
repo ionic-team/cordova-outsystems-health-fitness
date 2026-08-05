@@ -1,4 +1,4 @@
-import OSHealthFitnessLib
+import IONHealthFitnessLib
 
 @objc(OSHealthFitness)
 class OSHealthFitness: CDVPlugin {
