@@ -1,19 +1,19 @@
 var exec = require('cordova/exec');
 
-exports.requestPermissions = function (success, error, params) {
+exports.requestHealthPermissions = function (success, error, params) {
 
-    const { 
-        customPermissions, 
-        allVariables, 
-        fitnessVariables, 
-        healthVariables, 
-        profileVariables, 
-        workoutVariables 
+    const {
+        customPermissions,
+        allVariables,
+        fitnessVariables,
+        healthVariables,
+        profileVariables,
+        workoutVariables
     } = params;
 
     var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, workoutVariables];
 
-    exec(success, error, 'OSHealthFitnessPlugin', 'requestPermissions', args);
+    exec(success, error, 'OSHealthFitnessPlugin', 'requestHealthPermissions', args);
 };
 
 exports.getData = function (success, error, params) {
@@ -22,14 +22,6 @@ exports.getData = function (success, error, params) {
 
 exports.getWorkoutData = function (success, error, params) {
     exec(success, error, 'OSHealthFitnessPlugin', 'getWorkoutData', [params]);
-};
-
-exports.updateData = function (success, error) {
-    exec(success, error, 'OSHealthFitnessPlugin', 'updateData');
-};
-
-exports.enableBackgroundJob = function (success, error) {
-    exec(success, error, 'OSHealthFitnessPlugin', 'enableBackgroundJob');
 };
 
 exports.writeData = function (success, error, variable, value) {

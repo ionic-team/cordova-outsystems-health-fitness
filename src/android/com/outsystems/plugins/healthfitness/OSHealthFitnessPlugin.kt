@@ -108,7 +108,7 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         }
 
         when (action) {
-            "requestPermissions" -> {
+            "requestHealthPermissions" -> {
                 initAndRequestPermissions(args, callbackContext)
             }
 
@@ -197,8 +197,11 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
             TimeUnitSerializer(onDeprecatedUsage)
         )
             .create()
-        val parameters =
+        val parameters = try {
             customGson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
+        } catch (e: Exception) {
+            return sendError(callbackContext, HealthFitnessError.PARSING_PARAMETERS_ERROR)
+        }
         healthConnectViewModel.advancedQuery(
             parameters,
             cordova.context,
@@ -258,7 +261,12 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
      */
     private fun setBackgroundJob(args: JSONArray) {
         // save arguments for later use
-        backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
+        backgroundParameters = try {
+            gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
+        } catch (e: Exception) {
+            callbackContext?.let { sendError(it, HealthFitnessError.PARSING_PARAMETERS_ERROR) }
+            return
+        }
 
         //request permission for exact alarms if necessary
         if (!Constants.ACTIVITY_VARIABLES.contains(backgroundParameters.variable) && SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
@@ -284,6 +292,14 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
                 add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
         }.toTypedArray()
+
+        // Android never invokes the permission-result callback for an empty
+        // request (only possible pre-API 29), which would otherwise hang here
+        // forever - skip straight to the next step instead.
+        if (permissions.isEmpty()) {
+            callbackContext?.let { requestReadDataBackgroundPermission(it) }
+            return
+        }
 
         PermissionHelper.requestPermissions(
             this,
@@ -359,7 +375,11 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
     }
 
     private fun updateBackgroundJob(args: JSONArray, callbackContext: CallbackContext) {
-        val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
+        val parameters = try {
+            gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
+        } catch (e: Exception) {
+            return sendError(callbackContext, HealthFitnessError.PARSING_PARAMETERS_ERROR)
+        }
         healthConnectViewModel.updateBackgroundJob(
             parameters,
             { sendSuccess(callbackContext) },
@@ -430,12 +450,12 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
             var result: Pair<String, String>? = if (googleApiAvailability.isUserResolvableError(status)) {
                 googleApiAvailability.getErrorDialog(cordova.activity, status, 1)?.show()
                 Pair(
-                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(),
+                    formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code),
                     HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
                 )
             } else {
                 Pair(
-                    HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(),
+                    formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_ERROR.code),
                     HealthFitnessError.GOOGLE_SERVICES_ERROR.message
                 )
             }
@@ -472,6 +492,12 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
 
     companion object {
         const val BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE = 2
+        private const val ERROR_FORMAT_PREFIX = "OS-PLUG-HLFT-"
+    }
+
+    private fun formatErrorCode(code: Int): String {
+        val stringCode = Integer.toString(code)
+        return ERROR_FORMAT_PREFIX + "0000$stringCode".substring(stringCode.length)
     }
 
     /**
@@ -521,7 +547,7 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         val pluginResult = PluginResult(
             PluginResult.Status.ERROR,
             JSONObject().apply {
-                put("code", error.code)
+                put("code", formatErrorCode(error.code))
                 put("message", error.message)
             }
         )
