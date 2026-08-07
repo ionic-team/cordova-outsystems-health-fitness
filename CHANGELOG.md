@@ -10,7 +10,7 @@ The changes documented here do not include those from the original repository.
 
 ### Features
 
-- feat: new health and fitness plugin (#1)
+- feat: new health and fitness Cordova plugin (#1)
 
 ## [1.0.0]
 
