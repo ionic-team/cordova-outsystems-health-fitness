@@ -8,8 +8,8 @@ class OSHealthFitnessPlugin: CDVPlugin {
         plugin = HealthFitnessPlugin()
     }
     
-    @objc(requestPermissions:)
-    func requestPermissions(command: CDVInvokedUrlCommand) {
+    @objc(requestHealthPermissions:)
+    func requestHealthPermissions(command: CDVInvokedUrlCommand) {
         let customPermissions = command.arguments[0] as? String ?? ""
         let allVariables = command.arguments[1] as? String ?? ""
         let fitnessVariables = command.arguments[2] as? String ?? ""
@@ -60,6 +60,8 @@ class OSHealthFitnessPlugin: CDVPlugin {
                 guard let self = self else { return }
                 self.sendResult(result: "", error: !success ? error : nil, callBackID: command.callbackId)
             }
+        } else {
+            sendResult(result: "", error: HealthKitErrors.badParameterType as NSError, callBackID: command.callbackId)
         }
     }
     
@@ -172,9 +174,11 @@ class OSHealthFitnessPlugin: CDVPlugin {
                     self.sendResult(result: nil, error: error, callBackID: command.callbackId)
                 }
             }
+        } else {
+            sendResult(result: "", error: HealthKitErrors.badParameterType as NSError, callBackID: command.callbackId)
         }
     }
-    
+
     @objc(getData:)
     func getData(command: CDVInvokedUrlCommand) {
         let queryParameters = command.arguments[0] as? String ?? ""
@@ -207,12 +211,16 @@ class OSHealthFitnessPlugin: CDVPlugin {
                     self.sendResult(result: nil, error: error, callBackID: command.callbackId)
                 }
             }
+        } else {
+            sendResult(result: "", error: HealthKitErrors.badParameterType as NSError, callBackID: command.callbackId)
         }
     }
-    
+
     @objc(getWorkoutData:)
     func getWorkoutData(command: CDVInvokedUrlCommand) {
-        guard let arg = command.argument(at: 0) as? String, let queryParameters = arg.decode() as WorkoutAdvancedQueryParameters? else { return }
+        guard let arg = command.argument(at: 0) as? String, let queryParameters = arg.decode() as WorkoutAdvancedQueryParameters? else {
+            return sendResult(result: "", error: HealthKitErrors.badParameterType as NSError, callBackID: command.callbackId)
+        }
         let workoutTypeVariableDictionary = queryParameters.workoutTypeVariableDictionary
         let startDate = Date(queryParameters.startDate ?? "")
         let endDate = Date(queryParameters.endDate ?? "")
@@ -233,7 +241,7 @@ class OSHealthFitnessPlugin: CDVPlugin {
         
         if let error = error {
             if !error.localizedDescription.isEmpty {
-                let errorCode = String(error.code)
+                let errorCode = "OS-PLUG-HLFT-" + String(format: "%04d", error.code)
                 let errorMessage = error.localizedDescription
                 let errorDict = ["code": errorCode, "message": errorMessage]
                 pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errorDict);

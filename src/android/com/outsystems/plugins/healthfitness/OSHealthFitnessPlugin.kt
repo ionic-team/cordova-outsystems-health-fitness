@@ -13,23 +13,23 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.ionic.libs.ionhealthfitnesslib.background.BackgroundJobParameters
-import io.ionic.libs.ionhealthfitnesslib.background.DatabaseManager
-import io.ionic.libs.ionhealthfitnesslib.background.UpdateBackgroundJobParameters
-import io.ionic.libs.ionhealthfitnesslib.data.Constants
-import io.ionic.libs.ionhealthfitnesslib.data.HealthEnumTimeUnit
-import io.ionic.libs.ionhealthfitnesslib.data.HealthFitnessError
-import io.ionic.libs.ionhealthfitnesslib.data.HealthRecord
-import io.ionic.libs.ionhealthfitnesslib.data.types.HealthAdvancedQueryParameters
-import io.ionic.libs.ionhealthfitnesslib.data.types.HealthFitnessGroupPermission
-import io.ionic.libs.ionhealthfitnesslib.data.types.HealthFitnessPermission
-import io.ionic.libs.ionhealthfitnesslib.helpers.ActivityTransitionHelper
-import io.ionic.libs.ionhealthfitnesslib.helpers.AlarmManagerHelper
-import io.ionic.libs.ionhealthfitnesslib.helpers.HealthConnectHelper
-import io.ionic.libs.ionhealthfitnesslib.repository.HealthConnectRepository
-import io.ionic.libs.ionhealthfitnesslib.store.*
-import io.ionic.libs.ionhealthfitnesslib.viewmodel.HealthConnectDataManager
-import io.ionic.libs.ionhealthfitnesslib.viewmodel.HealthConnectViewModel
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.DatabaseManager
+import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitness.data.Constants
+import com.outsystems.plugins.healthfitness.data.HealthEnumTimeUnit
+import com.outsystems.plugins.healthfitness.data.HealthFitnessError
+import com.outsystems.plugins.healthfitness.data.HealthRecord
+import com.outsystems.plugins.healthfitness.data.types.HealthAdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.data.types.HealthFitnessGroupPermission
+import com.outsystems.plugins.healthfitness.data.types.HealthFitnessPermission
+import com.outsystems.plugins.healthfitness.helpers.ActivityTransitionHelper
+import com.outsystems.plugins.healthfitness.helpers.AlarmManagerHelper
+import com.outsystems.plugins.healthfitness.helpers.HealthConnectHelper
+import com.outsystems.plugins.healthfitness.repository.HealthConnectRepository
+import com.outsystems.plugins.healthfitness.store.*
+import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectDataManager
+import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectViewModel
 import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONException
@@ -108,7 +108,7 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         }
 
         when (action) {
-            "requestPermissions" -> {
+            "requestHealthPermissions" -> {
                 initAndRequestPermissions(args, callbackContext)
             }
 
@@ -197,8 +197,11 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
             TimeUnitSerializer(onDeprecatedUsage)
         )
             .create()
-        val parameters =
+        val parameters = try {
             customGson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
+        } catch (e: Exception) {
+            return sendError(callbackContext, HealthFitnessError.PARSING_PARAMETERS_ERROR)
+        }
         healthConnectViewModel.advancedQuery(
             parameters,
             cordova.context,
@@ -258,7 +261,12 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
      */
     private fun setBackgroundJob(args: JSONArray) {
         // save arguments for later use
-        backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
+        backgroundParameters = try {
+            gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
+        } catch (e: Exception) {
+            callbackContext?.let { sendError(it, HealthFitnessError.PARSING_PARAMETERS_ERROR) }
+            return
+        }
 
         //request permission for exact alarms if necessary
         if (!Constants.ACTIVITY_VARIABLES.contains(backgroundParameters.variable) && SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
@@ -284,6 +292,14 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
                 add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
         }.toTypedArray()
+
+        // Android never invokes the permission-result callback for an empty
+        // request (only possible pre-API 29), which would otherwise hang here
+        // forever - skip straight to the next step instead.
+        if (permissions.isEmpty()) {
+            callbackContext?.let { requestReadDataBackgroundPermission(it) }
+            return
+        }
 
         PermissionHelper.requestPermissions(
             this,
@@ -359,7 +375,11 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
     }
 
     private fun updateBackgroundJob(args: JSONArray, callbackContext: CallbackContext) {
-        val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
+        val parameters = try {
+            gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
+        } catch (e: Exception) {
+            return sendError(callbackContext, HealthFitnessError.PARSING_PARAMETERS_ERROR)
+        }
         healthConnectViewModel.updateBackgroundJob(
             parameters,
             { sendSuccess(callbackContext) },
@@ -430,12 +450,12 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
             var result: Pair<String, String>? = if (googleApiAvailability.isUserResolvableError(status)) {
                 googleApiAvailability.getErrorDialog(cordova.activity, status, 1)?.show()
                 Pair(
-                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(),
+                    formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code),
                     HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
                 )
             } else {
                 Pair(
-                    HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(),
+                    formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_ERROR.code),
                     HealthFitnessError.GOOGLE_SERVICES_ERROR.message
                 )
             }
@@ -472,6 +492,12 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
 
     companion object {
         const val BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE = 2
+        private const val ERROR_FORMAT_PREFIX = "OS-PLUG-HLFT-"
+    }
+
+    private fun formatErrorCode(code: Int): String {
+        val stringCode = Integer.toString(code)
+        return ERROR_FORMAT_PREFIX + "0000$stringCode".substring(stringCode.length)
     }
 
     /**
@@ -498,7 +524,7 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         warning: OSHealthFitnessWarning
     ) {
         val warningObject = JSONObject().apply {
-            put("code", warning.code)
+            put("code", formatErrorCode(warning.code))
             put("message", warning.message)
         }
         val pluginResult = PluginResult(
@@ -521,7 +547,7 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         val pluginResult = PluginResult(
             PluginResult.Status.ERROR,
             JSONObject().apply {
-                put("code", error.code)
+                put("code", formatErrorCode(error.code))
                 put("message", error.message)
             }
         )

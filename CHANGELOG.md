@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [1.1.0]
+
+### Features
+
+- feat: new health and fitness Cordova plugin (#1)
+
 ## [1.0.0]
 
 - Initial release of the Cordova Health & Fitness plugin under ionic-team, pointing at the new `ion-android-healthfitness` and `ion-ios-healthfitness` native libraries.
