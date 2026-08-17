@@ -107,11 +107,7 @@
             <source url="https://cdn.cocoapods.org/"/>
         </config>
         <pods use-frameworks="true">
-            <!-- TEMP: pinned to a pre-release tag on ion-ios-healthfitness's
-                 fix/RMET-5336/minor-updates branch (not yet merged to main) -
-                 switch back to spec="1.0.0" (or later) once that PR merges
-                 and a real version is released to CocoaPods trunk. -->
-            <pod name="IONHealthFitnessLib" tag="1.0.1-beta.0" git="https://github.com/ionic-team/ion-ios-healthfitness.git" />
+            <pod name="IONHealthFitnessLib" spec="1.0.1" />
         </pods>
     </podspec>
   </platform>
