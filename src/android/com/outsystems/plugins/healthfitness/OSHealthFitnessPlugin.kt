@@ -524,7 +524,7 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         warning: OSHealthFitnessWarning
     ) {
         val warningObject = JSONObject().apply {
-            put("code", warning.code)
+            put("code", formatErrorCode(warning.code))
             put("message", warning.message)
         }
         val pluginResult = PluginResult(
