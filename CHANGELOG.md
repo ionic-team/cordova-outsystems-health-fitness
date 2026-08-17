@@ -1,3 +1,10 @@
+# 1.0.0 (2026-08-17)
+
+
+### Features
+
+* new health and fitness Cordova plugin ([#1](https://github.com/ionic-team/cordova-outsystems-health-fitness/issues/1)) ([3d55e14](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/3d55e14d4475137fd2daf1cda489551f695f2c10))
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
