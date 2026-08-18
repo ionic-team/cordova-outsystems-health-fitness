@@ -15,7 +15,7 @@ class OSHealthFitnessPlugin: CDVPlugin {
         let fitnessVariables = command.arguments[2] as? String ?? ""
         let healthVariables = command.arguments[3] as? String ?? ""
         let profileVariables = command.arguments[4] as? String ?? ""
-        let workoutVariables = command.argument(at: 6) as? String ?? ""
+        let workoutVariables = command.argument(at: 5) as? String ?? ""
         let variable = VariableStruct(allVariables: allVariables, fitnessVariables: fitnessVariables, healthVariables: healthVariables, profileVariables: profileVariables, workoutVariables: workoutVariables)
         
         self.plugin?.requestPermissions(customPermissions:customPermissions, variable: variable) { [weak self] authorized, error in
