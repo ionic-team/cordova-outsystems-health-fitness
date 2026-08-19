@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.0.0...1.0.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* **ios:** properly handle workoutVariables ([#2](https://github.com/ionic-team/cordova-outsystems-health-fitness/issues/2)) ([8c1738a](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/8c1738a794316741568b121ab9a1e0c1e267b46f))
+
 # 1.0.0 (2026-08-17)
 
 
