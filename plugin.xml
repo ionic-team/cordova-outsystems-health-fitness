@@ -25,7 +25,7 @@
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3"/>
     <framework src="com.google.code.gson:gson:2.8.8"/>
   </platform>
-  <platform name="ios">
+  <platform name="ios" package="swift">
     <config-file parent="/*" target="config.xml">
       <feature name="OSHealthFitnessPlugin">
         <param name="ios-package" value="OSHealthFitnessPlugin"/>
@@ -83,7 +83,7 @@
         <source url="https://cdn.cocoapods.org/"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="IONHealthFitnessLib" spec="1.0.1"/>
+        <pod name="IONHealthFitnessLib" spec="1.0.1" nospm="true"/>
       </pods>
     </podspec>
   </platform>
