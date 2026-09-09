@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.0.1...1.1.0) (2026-09-09)
+
+
+### Features
+
+* **ios:** add Swift Package Manager support ([41ce7a1](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/41ce7a1ca687c353afbf7c3ccc2fc5507df87bd6))
+
 ## [1.0.1](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.0.0...1.0.1) (2026-08-19)
 
 
