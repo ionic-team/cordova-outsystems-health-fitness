@@ -1,3 +1,7 @@
+#if canImport(Cordova)
+import Cordova
+#endif
+
 import IONHealthFitnessLib
 
 @objc(OSHealthFitnessPlugin)
