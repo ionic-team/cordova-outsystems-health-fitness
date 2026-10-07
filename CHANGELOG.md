@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.1.0...1.1.1) (2026-10-07)
+
+
+### Bug Fixes
+
+* **ios:** update native lib to latest version ([#4](https://github.com/ionic-team/cordova-outsystems-health-fitness/issues/4)) ([769673a](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/769673a300b4b6e8f55407e7104e867d05a02237))
+
 # [1.1.0](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.0.1...1.1.0) (2026-09-09)
 
 
