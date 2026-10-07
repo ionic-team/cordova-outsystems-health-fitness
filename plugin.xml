@@ -83,7 +83,7 @@
         <source url="https://cdn.cocoapods.org/"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="IONHealthFitnessLib" spec="1.0.1" nospm="true"/>
+        <pod name="IONHealthFitnessLib" spec="2.0.0" nospm="true"/>
       </pods>
     </podspec>
   </platform>
