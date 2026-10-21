@@ -447,16 +447,16 @@ class OSHealthFitnessPlugin : CordovaPlugin() {
         val status = googleApiAvailability.isGooglePlayServicesAvailable(cordova.activity)
 
         if (status != ConnectionResult.SUCCESS) {
-            var result: Pair<String, String>? = if (googleApiAvailability.isUserResolvableError(status)) {
+            var result: Map<String, String>? = if (googleApiAvailability.isUserResolvableError(status)) {
                 googleApiAvailability.getErrorDialog(cordova.activity, status, 1)?.show()
-                Pair(
-                    formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code),
-                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
+                mapOf(
+                    "first" to formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code),
+                    "second" to HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
                 )
             } else {
-                Pair(
-                    formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_ERROR.code),
-                    HealthFitnessError.GOOGLE_SERVICES_ERROR.message
+                mapOf(
+                    "first" to formatErrorCode(HealthFitnessError.GOOGLE_SERVICES_ERROR.code),
+                    "second" to HealthFitnessError.GOOGLE_SERVICES_ERROR.message
                 )
             }
             callbackContext?.let {
