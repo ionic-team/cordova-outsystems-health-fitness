@@ -50,3 +50,12 @@ android {
         }
     }
 }
+
+// Cordova apps only get this file, so it writes its own R8 rules where clean won't remove them.
+// ionhealthfitness-android brings Room 2.5.1 and WorkManager 2.9.0, which lose these constructors under AGP 9.
+def r8Rules = new File(rootDir, '.gradle/outsystems-health-fitness-rules.pro')
+r8Rules.parentFile.mkdirs()
+r8Rules.text = '''-keep class * extends androidx.room.RoomDatabase { <init>(); }
+-keepclassmembers class * extends androidx.work.InputMerger { <init>(); }
+'''
+android.buildTypes.release.proguardFile(r8Rules)
