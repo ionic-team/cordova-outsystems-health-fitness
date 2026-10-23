@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.1.1...1.1.2) (2026-10-23)
+
+
+### Bug Fixes
+
+* **android:** keep strings read by name when shrinking resources ([05fac3d](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/05fac3d267be317a657959c471af31194ed9bded))
+* **android:** support R8 in release builds ([fc6ff32](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/fc6ff3257b1266ae50bf177f011a0d972c5bfa84))
+
 ## [1.1.1](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.1.0...1.1.1) (2026-10-07)
 
 
