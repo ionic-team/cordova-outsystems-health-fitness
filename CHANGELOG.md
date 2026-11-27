@@ -1,3 +1,11 @@
+## [1.1.3](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.1.2...1.1.3) (2026-11-27)
+
+
+### Bug Fixes
+
+* **android:** bump ionhealthfitness-android to 1.0.2 ([#7](https://github.com/ionic-team/cordova-outsystems-health-fitness/issues/7)) ([188e07c](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/188e07c0bc0846ea659fb18e356fb9382bb8c230))
+* **android:** update proguard rules via native lib ([#8](https://github.com/ionic-team/cordova-outsystems-health-fitness/issues/8)) ([3c08852](https://github.com/ionic-team/cordova-outsystems-health-fitness/commit/3c08852fbe6d4f6abedd0d64770eccef42524838))
+
 ## [1.1.2](https://github.com/ionic-team/cordova-outsystems-health-fitness/compare/1.1.1...1.1.2) (2026-10-23)
 
 
