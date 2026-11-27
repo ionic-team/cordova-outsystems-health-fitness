@@ -18,28 +18,28 @@ allprojects {
 
 dependencies{
     implementation("com.google.android.gms:play-services-auth:19.2.0")
-    implementation("com.google.android.gms:play-services-location:19.0.1")
-    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.code.gson:gson:2.13.2")
 
     implementation 'com.google.code.findbugs:jsr305:1.3.9'
 
     implementation("io.ionic.libs:ionhealthfitness-android:1.0.2")
 
     // activity
-    implementation "androidx.activity:activity-ktx:1.8.2"
+    implementation "androidx.activity:activity-ktx:1.10.1"
 
     // appcompact
-    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.appcompat:appcompat:1.7.1"
 
     // health connect sdk
     implementation "androidx.health.connect:connect-client:1.1.0-beta01"
 
     // compose
-    implementation 'androidx.activity:activity-compose:1.8.2'
-    implementation 'androidx.compose.material3:material3:1.2.0'
+    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.compose.material3:material3:1.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
     
-    def roomVersion = "2.4.2"
+    def roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
 }
 
